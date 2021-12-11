@@ -1,3 +1,4 @@
+.PHONY: build
 build:
 	# build images
 	docker build --tag mamachanko/make-anything-init-container init-container

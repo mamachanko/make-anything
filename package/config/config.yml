@@ -1,0 +1,59 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels():
+app: make-anything
+#@ end
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: make-anything
+  namespace: make-anything
+  labels: #@ labels()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: make-anything
+  namespace: make-anything
+  labels: #@ labels()
+spec:
+  replicas: #@ data.values.replicas
+  selector:
+    matchLabels: #@ labels()
+  template:
+    metadata:
+      labels: #@ labels()
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-credentials
+      initContainers:
+        - image: mamachanko/make-anything-init-container
+      containers:
+        - image: mamachanko/make-anything-container
+          name: make-anything
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: make-anything
+  namespace: make-anything
+  labels: #@ labels()
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector: #@ labels()
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dockerhub-credentials
+  namespace: make-anything
+  annotations:
+    secretgen.carvel.dev/image-pull-secret: ""
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: e30K

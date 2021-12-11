@@ -1,0 +1,9 @@
+---
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: make-anything.mamachanko.com
+spec:
+  displayName: "make-anything"
+  providerName: "github.com/mamachanko"
+  supportDescription: "https://github.com/mamachanko/make-anything"

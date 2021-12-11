@@ -1,0 +1,25 @@
+---
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: make-anything.mamachanko.com.0.1.0
+spec:
+  refName: make-anything.mamachanko.com
+  version: 0.1.0
+  licenses:
+    - Apache License Version 2.0
+  template:
+    spec:
+      fetch:
+        - imgpkgBundle:
+            image: mamachanko/make-anything-package
+      template:
+        - ytt:
+            paths:
+              - config/
+        - kbld:
+            paths:
+              - '-'
+              - .imgpkg/images.yml
+      deploy:
+        - kapp: {}
